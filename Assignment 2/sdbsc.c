@@ -111,7 +111,7 @@ int add_student(int fd, int id, char *fname, char *lname, int gpa)
 	 ssize_t read_bytes;
 	 ssize_t write_bytes;
 	 
-	 
+    memset(&student, 0, sizeof(student_t));
 	 offset = id * sizeof(student_t);
 
 	 if (lseek(fd, offset, SEEK_SET) == -1) {
@@ -120,12 +120,10 @@ int add_student(int fd, int id, char *fname, char *lname, int gpa)
 	 }
 
 	 read_bytes = read(fd, &student, sizeof(student_t));
-	 if (read_bytesd == -1) {
+	 if (read_bytes == -1) {
 		 printf(M_ERR_DB_READ);
 		 return ERR_DB_FILE;
 	 }
-
-     memset(&student, 0, sizeof(student_t));
      
 	 if (memcmp(&student, &EMPTY_STUDENT_RECORD, sizeof(student_t)) != 0) {
 		 printf(M_ERR_DB_ADD_DUP, id);
@@ -147,7 +145,7 @@ int add_student(int fd, int id, char *fname, char *lname, int gpa)
 		 return ERR_DB_FILE;
 	 }
 	 printf(M_STD_ADDED, id);
-	     return NO_ERROR;
+	 return NO_ERROR;
 }
 
 /*
@@ -226,7 +224,7 @@ int count_db_records(int fd)
     // TODO
 	 student_t student;
 	 ssize_t read_bytes;
-     int counter = 0;
+    int counter = 0;
 
 	 while ((read_bytes = read(fd, &student, sizeof(student_t))) != 0) {
 		 if (memcmp(&student, &EMPTY_STUDENT_RECORD, sizeof(student_t)) != 0) {
@@ -240,7 +238,7 @@ int count_db_records(int fd)
 	 if (counter == 0) {
 		 printf(M_DB_EMPTY);
 	 }
-	 printf(M_DB_RECORD_CNT, i);
+	 printf(M_DB_RECORD_CNT, counter);
     return counter;
 }
 
@@ -641,4 +639,3 @@ int main(int argc, char *argv[])
     close(fd);
     exit(exit_code);
 }
-
