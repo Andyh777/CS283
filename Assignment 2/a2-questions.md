@@ -102,11 +102,10 @@ Please answer the following questions and submit in your repo for the second ass
 
     - Please explain why the file size reported by the `ls` command was 128 bytes after adding student with ID=1, 256 after adding student with ID=3, and 4160 after adding the student with ID=64? 
 
-        > **ANSWER:**  
-
+        > **ANSWER:**  LS reports the size on a sparse file, but after it hit a limit, it changed to non sprase.
     -   Why did the total storage used on the disk remain unchanged when we added the student with ID=1, ID=3, and ID=63, but increased from 4K to 8K when we added the student with ID=64? 
 
-        > **ANSWER:** _start here_
+        > **ANSWER:** It changed because the swap from sparse to non sparse required more disk usage.
 
     - Now lets add one more student with a large student ID number  and see what happens:
 
@@ -119,4 +118,4 @@ Please answer the following questions and submit in your repo for the second ass
         ```
         We see from above adding a student with a very large student ID (ID=99999) increased the file size to 6400000 as shown by `ls` but the raw storage only increased to 12K as reported by `du`.  Can provide some insight into why this happened?
 
-        > **ANSWER:**  _start here_
+        > **ANSWER:**  The raw storage only increased to 12k because it was added to a large position but it does not include the space in between ID 99999 and ID 64, so it didn't require more raw storage.
