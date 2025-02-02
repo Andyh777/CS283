@@ -63,9 +63,9 @@ int open_db(char *dbFile, bool should_truncate)
 int get_student(int fd, int id, student_t *s) {
     // TODO
 	 student_t temp_student;
-	 int read_bytes;
+	 ssize_t read_bytes;
 
-	 while ((read_bytes = read(fd, &temp_student, sizeof(student_t))) > 0) {
+	 while ((read_bytes = read(fd, &temp_student, sizeof(student_t))) != 0) {
 		 if (temp_student.id == id) {
 			*s = temp_student;
 			return NO_ERROR;
@@ -107,9 +107,9 @@ int add_student(int fd, int id, char *fname, char *lname, int gpa)
     // TODO
 
 	 student_t student;
-	 int offset;
-	 int read_bytes;
-	 int write_bytes;
+	 off_t offset;
+	 ssize_t read_bytes;
+	 ssize_t write_bytes;
 	 
 	 
 	 offset = id * sizeof(student_t);
@@ -176,7 +176,7 @@ int del_student(int fd, int id)
 {
     // TODO
 	 student_t student;
-	 int offset;
+	 off_t offset;
 
 	 if (get_student(fd, id, &student) == SRCH_NOT_FOUND) {
 		 printf(M_STD_NOT_FND_MSG, id);
@@ -225,7 +225,7 @@ int count_db_records(int fd)
 {
     // TODO
 	 student_t student;
-	 int read_bytes;
+	 ssize_t read_bytes;
      int counter = 0;
 
 	 while ((read_bytes = read(fd, &student, sizeof(student_t))) != 0) {
@@ -281,7 +281,7 @@ int print_db(int fd)
 {
     // TODO
 	 student_t student;
-	 int read_bytes;
+	 ssize_t read_bytes;
 	 // Treated as a boolean
 	 int empty_db = 1;
 
