@@ -118,4 +118,4 @@ Please answer the following questions and submit in your repo for the second ass
         ```
         We see from above adding a student with a very large student ID (ID=99999) increased the file size to 6400000 as shown by `ls` but the raw storage only increased to 12K as reported by `du`.  Can provide some insight into why this happened?
 
-        > **ANSWER:**  The raw storage only increased to 12k because it was added to a large position but it does not include the space in between ID 99999 and ID 64, so it didn't require more raw storage.
+        > **ANSWER:**  The raw storage only increased to 12k because it was added to a large position but it does not include the space in between ID 99999 and ID 64, so it didn't require more raw storage.git 
