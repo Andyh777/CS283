@@ -19,7 +19,7 @@ Built_In_Cmds exec_built_in_cmd(cmd_buff_t *cmd) {
 		}
 		if (chdir(cmd->argv[1]) != 0) {
 				perror("cd");
-				return BI_ERROR;
+				return BI_NOT_BI;
 		}
 		return BI_EXECUTED;
 		}
