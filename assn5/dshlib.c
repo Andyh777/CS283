@@ -12,47 +12,35 @@ int execute_pipeline(command_list_t *clist) {
 	int num_commands = clist->num;
 	int pipes[num_commands - 1][2];  // Array of pipes
    pid_t pids[num_commands];        // Array to store process IDs
-
    for (int i = 0; i < num_commands - 1; i++) {
        if (pipe(pipes[i]) == -1) {
            perror("pipe");
 			  return -1;
        }
    }
-
-    // Create processes for each command
     for (int i = 0; i < num_commands; i++) {
         pids[i] = fork();
         if (pids[i] == -1) {
             perror("fork");
-				return -1
+				return -1;
         }
-
         if (pids[i] == 0) {  // Child process
             // Set up input pipe for all except first process
             if (i > 0) {
                 dup2(pipes[i-1][0], STDIN_FILENO);
             }
-
-            // Set up output pipe for all except last process
             if (i < num_commands - 1) {
                 dup2(pipes[i][1], STDOUT_FILENO);
             }
-
-            // Close all pipe ends in child
             for (int j = 0; j < num_commands - 1; j++) {
                 close(pipes[j][0]);
                 close(pipes[j][1]);
             }
-
-            // Execute command
             execvp(clist->commands[i].argv[0], clist->commands[i].argv);
             perror("execvp");
 				return -1;
         }
     }
-
-    // Parent process: close all pipe ends
     for (int i = 0; i < num_commands - 1; i++) {
         close(pipes[i][0]);
         close(pipes[i][1]);
@@ -197,21 +185,7 @@ int exec_local_cmd_loop()
 			 continue;
 		 }
 
-		 int f_result = execute_pipeline(&clist);
-		 int status;
-		 if (f_result < 0) {
-			 perror("fork error");
-			 continue;
-		 }
-		 if (f_result == 0) {
-			 execvp(cmd.argv[0], cmd.argv);
-			 perror("execvp error");
-			 exit(ERR_EXEC_CMD);
-		 }
-		 else {
-			 wait(&status);
-		 }
-
+		 execute_pipeline(&clist);
 	 }
 	 free(cmd_buff);
 

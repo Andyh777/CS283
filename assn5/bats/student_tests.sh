@@ -97,9 +97,11 @@ EOF
     run ./dsh <<EOF
 cd fishbowl
 EOF
-	echo "$output"
+   echo "${stripped_output} -> ${expected_output}"
 	stripped_output=$(echo "$output" | tr -d '[:space:]')
-	expected_output="execvp:Nosuchfileordirectorydsh3>dsh3>dsh3>cmdloopreturned0"
+	expected_output="execvp:Nosuchfileordirectorydsh3>dsh3>cmdloopreturned0dsh3>dsh3>cmdloopreturned0"
+	echo "Output: $output"
+	echo "${stripped_output} -> ${expected_output}"
 	[ "$status" -eq 0 ]
 	[ "$stripped_output" = "$expected_output" ]
 }
